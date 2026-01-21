@@ -1,0 +1,13 @@
+package com.pms.easy_book;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class EasyBookingApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(EasyBookingApplication.class, args);
+	}
+
+}
