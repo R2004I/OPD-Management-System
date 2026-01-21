@@ -144,7 +144,7 @@ MySQL
 
 ## Steps
 ### Clone repository
-git clone https://github.com/your-username/easy-booking.git
+git clone https://github.com/R2004I/OPD-Management-System
 
 ### Move into project directory
 cd easy-booking
