@@ -121,6 +121,7 @@ Secure login & role handling
 
 ### 📡 Sample REST APIs
 Method	 Endpoint	                    Description
+
 POST	/api/patients/register	   Register a new patient
 
 POST	/api/appointments/book	   Book an appointment
