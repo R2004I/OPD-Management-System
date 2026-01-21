@@ -60,6 +60,7 @@ Controller  →  Service  →  Repository  →  Database
 
 # Package Structure
 com.pms
+
 ┣ controller     → REST API endpoints
 
 ┣ service        → Business logic
@@ -76,6 +77,7 @@ com.pms
 
 # 🛠️ Tech Stack
 Layer	            Technology
+
 Language	          Java
 
 Backend Framework	Spring Boot
