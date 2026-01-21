@@ -1,16 +1,16 @@
-### 🚀 Easy Booking – Doctor Appointment Management System
+# 🚀 Easy Booking – Doctor Appointment Management System
 Easy Booking is a full-stack backend application built using Spring Boot that streamlines
 doctor appointment scheduling, patient management, payments, and email notifications.
 The system is designed with clean architecture, RESTful APIs, and scalable service layers, making it production-ready.
 
-### 📌 Problem Statement
+# 📌 Problem Statement
 Managing doctor appointments manually leads to:
  ** Scheduling conflicts
  ** Poor patient experience
  ** No centralized payment or notification system
 Easy Booking solves this by providing a secure, automated, and scalable appointment booking platform.
 
-### Key Features
+# Key Features
 
 ## 👨‍⚕️ Doctor Management
 Add, update, and view doctor profiles
