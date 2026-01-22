@@ -78,23 +78,23 @@ com.pms
 # 🛠️ Tech Stack
 Layer	            Technology
 
-Language	          Java
+Language	 -         Java
 
-Backend Framework	Spring Boot
+Backend Framework -	Spring Boot
 
-ORM	            Spring Data JPA (Hibernate)
+ORM	      -      Spring Data JPA (Hibernate)
 
-Security	      Spring Security
+Security	-      Spring Security
 
-Database	         MySQL
+Database	  -       MySQL
 
-Build Tool	         Maven
+Build Tool	   -      Maven
 
-API Style	         REST
+API Style	  -       REST
 
-Utilities	        Lombok
+Utilities	  -      Lombok
 
-Email Service	  Java Mail Sender
+Email Service	-   Java Mail Sender
 
 # 🔑 Core Modules Explained
 ## 🔹 Appointment Service
