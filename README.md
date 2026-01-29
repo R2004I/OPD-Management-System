@@ -104,27 +104,29 @@ Each role is secured using **JWT + Spring Security filters**.
 
 ## 📁 Project Structure
 
+```
 Easy-booking/
 ├── src/main/java/com/pms/easy_book
-│ ├── controller/
-│ │ ├── public_controller/
-│ │ ├── authenticated_controller/
-│ │ ├── staff_controller/
-│ │ └── admin_controller/
-│ ├── service/
-│ ├── repo/
-│ ├── entity/
-│ ├── dto/
-│ ├── utils/
-│ ├── config/
-│ ├── filter/
-│ └── exception/
+│   ├── controller/
+│   │   ├── public_controller/
+│   │   ├── authenticated_controller/
+│   │   ├── staff_controller/
+│   │   └── admin_controller/
+│   ├── service/
+│   ├── repo/
+│   ├── entity/
+│   ├── dto/
+│   ├── utils/
+│   ├── config/
+│   ├── filter/
+│   └── exception/
 ├── src/main/resources/
-│ ├── application.properties
-│ ├── templates/
-│ └── static/
+│   ├── application.properties
+│   ├── templates/
+│   └── static/
 ├── pom.xml
 └── README.md
+```
 
 
 ---
@@ -142,7 +144,92 @@ Easy-booking/
 ### Installation
 
 #### Clone the repository
-```bash
+```
 git clone https://github.com/R2004I/OPD-Management-System.git
 cd Easy-booking
+```
+
+#### Configure Environment Variables
+```
+spring.datasource.url=jdbc:database url
+spring.datasource.username=database username
+spring.datasource.password=your_password
+
+jwt.secret=your_jwt_secret
+
+razorpay.key=your_key
+razorpay.secret=your_secret
+
+spring.mail.username=your_email
+spring.mail.password=your_email_password
+```
+
+#### Run the application
+```
+mvn spring-boot:run
+```
+#### Application will start at:
+```
+http://localhost:8080
+```
+
+---
+
+### API Overview
+
+#### Authentication
+```
+POST /auth/signup-user
+POST /public/signup-admin
+POST /public/login
+```
+#### Patient APIs
+```
+GET  authenticated/details
+POST authenticated/create-new-appointment
+GET  authenticated/appointments/my
+POST authenticated/payment/create-order
+```
+#### Hospital Staff APIs
+```
+POST staff/verify
+GET staff/today/appointment
+GET staff/ofDate/getAll
+```
+#### Admin APIs
+```
+POST admin/register-new-doctor
+GET admin/api/get/live/data
+GET admin/appointment
+DELETE admin/appointment/delete
+```
+
+---
+
+## 📊 Business Logic Covered
+
+- **Appointment lifecycle management**
+- **Payment → confirmation → verification flow**
+- **Enum-based status transitions**
+- **Pagination for large datasets**
+- **Secure DTO-based data exposure**
+
+---
+
+## 🚀 Future Enhancements
+
+- **Real-time notifications (WebSocket)**
+- **Slot-based appointment booking**
+- **Frontend (React / Angular)**
+- **Analytics dashboard**
+
+---
+
+## 👨‍💻 Author
+
+Ritam Sahoo
+Java Backend Developer | Spring Boot | REST APIs | System Design
+Built with ❤️ using Spring Boot and real-world backend engineering practices
+
+
 
