@@ -1,179 +1,242 @@
-# 🚀 Easy Booking – Doctor Appointment Management System
-Easy Booking is a full-stack backend application built using Spring Boot that streamlines
-doctor appointment scheduling, patient management, payments, and email notifications.
-The system is designed with clean architecture, RESTful APIs, and scalable service layers, making it production-ready.
+🏥 Easy Booking – Doctor Appointment & Payment System
+A secure, scalable, and real-world healthcare appointment booking platform built using Spring Boot, enabling patients to book doctor appointments, make online payments, and receive confirmations — while providing admins and staff with powerful management capabilities.
 
-# 📌 Problem Statement
-Managing doctor appointments manually leads to:
+Designed with clean architecture, JWT security, Razorpay payments, email notifications, and QR-based appointment verification.
 
- ** Scheduling conflicts
+🎯 Key Highlights (Why Recruiters Care)
+✅ End-to-end real-world business workflow
+✅ Secure JWT-based authentication & role-based access
+✅ Online payment integration (Razorpay)
+✅ Clean layered architecture (Controller → Service → Repository)
+✅ Exception-safe, scalable, production-ready backend
+✅ Demonstrates Spring Security, REST APIs, JPA, and integrations
 
- ** Poor patient experience
+👥 User Roles
+Patient (User)
 
- ** No centralized payment or notification system
+Staff
 
-Easy Booking solves this by providing a secure, automated, and scalable appointment booking platform.
+Admin
 
-# Key Features
+Each role has strictly separated access using JWT & Spring Security filters.
 
-## 👨‍⚕️ Doctor Management
-Add, update, and view doctor profiles
+✨ Features
+👤 Patient Module
+✅ User registration & login (JWT authentication)
 
-Fetch doctors by specialization
+✅ Browse available doctors
 
-## 🧑‍🤝‍🧑 Patient Management
-Patient registration & profile management
+✅ Book appointments with doctors
 
-Secure user authentication
+✅ Online payment using Razorpay
 
-## 📅 Appointment Booking
-Book appointments with available doctors
+✅ Receive email confirmation
 
-Prevent double bookings
+✅ QR code generation for appointment verification
 
-View appointment history
+✅ View appointment history & summary
 
-## 💳 Payment Module
-Appointment payment tracking
+🧑‍⚕️ Staff Module
+✅ View assigned appointments
 
-Payment status management
+✅ Update appointment status
 
-## 📧 Email Notification System
-Email confirmation after booking
+✅ Access patient details securely
 
-Modular email service design
+✅ Appointment summary dashboard
 
-## 🔐 Security
-Spring Security integration
+🛠 Admin Module
+✅ Manage doctors (Add / Update / Delete)
 
-Role-based access control
+✅ View all appointments & payments
 
-Secure password handling
+✅ System-wide summaries & analytics
 
-## ❗ Global Exception Handling
-Centralized exception management
+✅ User & staff management
 
-Clean and consistent API error responses
+✅ Secure administrative APIs
 
-# 🏗️ Project Architecture
-Controller  →  Service  →  Repository  →  Database
+🔐 Security Features
+✅ JWT Authentication
 
-# Package Structure
-com.pms
+✅ Custom JWT Filter
 
-┣ controller     → REST API endpoints
+✅ Role-Based Access Control (RBAC)
 
-┣ service        → Business logic
+✅ Password encryption
 
-┣ repo           → JPA repositories
+✅ Secure REST endpoints
 
-┣ model          → Entity classes
+✅ Centralized exception handling
 
-┣ dto            → Request & response DTOs
+💳 Payment System
+✅ Razorpay order creation & verification
 
-┣ exception      → Global exception handling
+✅ Secure payment callback handling
 
-┗ security       → Authentication & authorization
+✅ Payment status tracking
 
-# 🛠️ Tech Stack
-Layer	            Technology
+✅ Payment summary reports
 
-Language	 -         Java
+📧 Communication & Utilities
+📩 Email notifications on booking & payment
 
-Backend Framework -	Spring Boot
+📦 QR Code generation for appointments
 
-ORM	      -      Spring Data JPA (Hibernate)
+📄 Pagination utility for large datasets
 
-Security	-      Spring Security
+⚠️ Global exception handling
 
-Database	  -       MySQL
+🛠 Tech Stack
+Backend
+Java 17
 
-Build Tool	   -      Maven
+Spring Boot
 
-API Style	  -       REST
+Spring Security
 
-Utilities	  -      Lombok
+JWT Authentication
 
-Email Service	-   Java Mail Sender
+Spring Data JPA (Hibernate)
 
-# 🔑 Core Modules Explained
-## 🔹 Appointment Service
-Validates doctor availability
+MySQL
 
-Prevents overlapping bookings
+Razorpay Payment Gateway
 
-Links patient, doctor, and payment
+Java Mail Sender
 
-## 🔹 Payment Service
-Tracks payment details
+Lombok
 
-Updates appointment payment status
+Tools & Concepts
+RESTful APIs
 
-## 🔹 Email Service
-Sends appointment confirmation emails
+DTO Pattern
 
-Easily extendable for reminders & alerts
+Pagination
 
-## 🔹 User Authentication
-Custom UserDetailsService implementation
+Exception Handling
 
-Secure login & role handling
+Clean Architecture
 
-### 📡 Sample REST APIs
-Method	 Endpoint	                    Description
+Maven
 
-POST	/api/patients/register	   Register a new patient
-
-POST	/api/appointments/book	   Book an appointment
-
-GET	    /api/doctors	           Fetch all doctors
-
-GET	    /api/appointments/{id}	   Get appointment details
-
-POST	/api/payments	           Process payment
-
-
-# ⚙️ How to Run Locally
-## Prerequisites
+📁 Project Structure
+css
+Copy code
+Easy-booking/
+├── src/main/java/com/pms/easy_book
+│   ├── controller/
+│   │   ├── public_controller/
+│   │   ├── authenticated_controller/
+│   │   ├── staff_controller/
+│   │   └── admin_controller/
+│   ├── service/
+│   ├── repo/
+│   ├── entity/
+│   ├── dto/
+│   ├── utils/
+│   ├── config/
+│   ├── filter/
+│   └── exception/
+├── src/main/resources/
+│   ├── application.properties
+│   ├── templates/
+│   └── static/
+├── pom.xml
+└── README.md
+🚀 Getting Started
+Prerequisites
 Java 17+
 
 Maven
 
 MySQL
 
+Razorpay Account
 
-## Steps
-### Clone repository
-git clone https://github.com/R2004I/OPD-Management-System
-
-### Move into project directory
-cd easy-booking
-
-### Build project
-mvn clean install
-
-### Run application
-mvn spring-boot:run
-
-### Configure Database
+Installation
+Clone the repository
+bash
+Copy code
+git clone https://github.com/your-username/easy-booking.git
+cd Easy-booking
+Configure Database & Secrets
 Update application.properties:
 
-spring.datasource.url=user's database url
+properties
+Copy code
+spring.datasource.url=jdbc:mysql://localhost:3306/easy_booking
+spring.datasource.username=root
+spring.datasource.password=your_password
 
-spring.datasource.username=user's username for db connection
+jwt.secret=your_jwt_secret
+razorpay.key=your_key
+razorpay.secret=your_secret
 
-spring.datasource.password=user's password for db connection
+spring.mail.username=your_email
+spring.mail.password=your_email_password
+Run the Application
+bash
+Copy code
+mvn spring-boot:run
+Application runs at:
 
-spring.jpa.hibernate.ddl-auto=update
+arduino
+Copy code
+http://localhost:8080
+🧪 API Highlights
+Authentication
+POST /auth/register
 
-spring.jpa.show-sql=true
+POST /auth/login
 
+Patient
+GET /doctors
 
+POST /appointments/book
 
+GET /appointments/my
 
+POST /payment/create-order
 
+Admin
+POST /admin/doctor
 
+GET /admin/appointments
 
+GET /admin/payments/summary
 
+📊 Business Logic Covered
+Appointment lifecycle management
 
+Payment → confirmation → verification flow
 
+Status transitions using enums
+
+Pagination for large datasets
+
+Secure data exposure using DTOs
+
+🚢 Future Enhancements
+🔔 Real-time notifications (WebSocket)
+
+📅 Slot-based booking
+
+📱 Frontend (React / Angular)
+
+📊 Admin analytics dashboard
+
+☁️ Cloud deployment (AWS)
+
+📄 License
+This project is open-source and intended for educational & portfolio purposes.
+
+🤝 Contributing
+Contributions are welcome!
+Fork the repo, create a branch, and submit a PR 🚀
+
+👨‍💻 Author
+Ritam Sahoo
+Java Backend Developer | Spring Boot | REST APIs | System Design
+
+Built with ❤️ using Spring Boot & real-world engineering practices
