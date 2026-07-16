@@ -5,6 +5,7 @@ import com.pms.easy_book.dto.LoginDTO;
 import com.pms.easy_book.dto.UserDTO;
 import com.pms.easy_book.entity.Doctors;
 import com.pms.easy_book.service.DoctorService;
+import com.pms.easy_book.service.EmailService;
 import com.pms.easy_book.service.UserDetailsServiceImpl;
 import com.pms.easy_book.service.UserService;
 import com.pms.easy_book.utils.JwtUtil;
@@ -41,6 +42,8 @@ public class PublicController {
 
     @Autowired
     private JwtUtil jwtUtil;
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping("/signup-user")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO user){
@@ -57,6 +60,8 @@ public class PublicController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO user){
+        System.out.println("Username"+user.getUserName());
+        System.out.println("Password"+user.getPassword());
         try {
             Authentication authenticate = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword())
@@ -66,8 +71,10 @@ public class PublicController {
             Map<String, String> response = new HashMap<>();
             response.put("token", token);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }catch (Exception e){
-            return new ResponseEntity<>("Incorrect username or password", HttpStatus.BAD_REQUEST);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(e.getMessage());
         }
     }
 
@@ -100,6 +107,12 @@ public class PublicController {
         String s = userService.updatePassword(existEmail, password);
         return ResponseEntity.status(HttpStatus.OK).body(s);
 
+    }
+
+    @PostMapping("/send-email")
+    public ResponseEntity<?> sendEmail(@RequestParam("email") String email){
+        emailService.sendTestEmail(email);
+        return ResponseEntity.ok("Email send successfully");
     }
 
 }

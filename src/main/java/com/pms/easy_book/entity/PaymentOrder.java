@@ -1,7 +1,7 @@
 package com.pms.easy_book.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pms.easy_book.Enum.Status;
+import com.pms.easy_book.Enum.PaymentStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class PaymentOrder {
     private String orderId;
     private String paymentId;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private PaymentStatus status;
     private LocalDateTime createdAt;
 
     @OneToOne
@@ -60,11 +60,11 @@ public class PaymentOrder {
         this.paymentId = paymentId;
     }
 
-    public Status getStatus() {
+    public PaymentStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(PaymentStatus status) {
         this.status = status;
     }
 

@@ -1,6 +1,6 @@
 package com.pms.easy_book.repo;
 
-import com.pms.easy_book.Enum.Status;
+import com.pms.easy_book.Enum.BookingStatus;
 import com.pms.easy_book.dto.AppointmentSummaryDTO;
 import com.pms.easy_book.entity.Appointments;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface AppointmentRepo extends JpaRepository<Appointments,Long> {
 
-    public List<Appointments> findByStatus(Status status);
+    public List<Appointments> findByStatus(BookingStatus status);
 
     @Query("SELECT a FROM Appointments a WHERE a.doctor.id = :doctorId AND a.appointmentDate = :date")
     List<Appointments> findAppointmentsByDoctorAndDate(Long doctorId, LocalDate date);
@@ -29,5 +29,7 @@ public interface AppointmentRepo extends JpaRepository<Appointments,Long> {
     @Query("SELECT new com.pms.easy_book.dto.AppointmentSummaryDTO(a.patientName, a.patientPhoneNo, a.patientEmail, a.department) " +
             "FROM Appointments a WHERE a.appointmentDate = CURRENT_DATE")
     List<AppointmentSummaryDTO> findTodayAppointments();
+
+    long countByStatus(BookingStatus status);
 
 }

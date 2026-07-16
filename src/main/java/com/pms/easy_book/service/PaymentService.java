@@ -1,7 +1,8 @@
 package com.pms.easy_book.service;
 
 import com.google.zxing.WriterException;
-import com.pms.easy_book.Enum.Status;
+import com.pms.easy_book.Enum.BookingStatus;
+import com.pms.easy_book.Enum.PaymentStatus;
 import com.pms.easy_book.entity.Appointments;
 import com.pms.easy_book.entity.PaymentOrder;
 import com.pms.easy_book.repo.AppointmentRepo;
@@ -69,7 +70,7 @@ public class PaymentService {
         payment.setAmount(appointments.getAmount());
         payment.setOrderId(order.get("id"));
         payment.setPaymentId(null);
-        payment.setStatus(Status.PENDING);
+        payment.setStatus(PaymentStatus.PENDING);
 
         payment.setAppointments(appointments);
         appointments.setPayment(payment);
@@ -101,24 +102,13 @@ public class PaymentService {
 
             //payment.getAppointments().setStatus(Status.SUCCESSFUL);
             payment.setPaymentId(razorpayPaymentId);
-            payment.setStatus(Status.SUCCESSFUL);
+            payment.setStatus(PaymentStatus.SUCCESSFUL);
             payment.setCreatedAt(LocalDateTime.now());
 
             payment.getAppointments().setConfirmationCode(generateBookingCode());
+            payment.getAppointments().setStatus(BookingStatus.SUCCESS);
             paymentRepo.save(payment);
             appointmentRepo.save(payment.getAppointments());
-
-            try {
-                emailService.confirmCode(payment.getAppointments());
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (WriterException e) {
-                throw new RuntimeException(e);
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
-            }
 
         }
         return payment.getAppointments().getConfirmationCode();

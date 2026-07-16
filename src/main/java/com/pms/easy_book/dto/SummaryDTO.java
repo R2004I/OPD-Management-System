@@ -1,10 +1,12 @@
 package com.pms.easy_book.dto;
 
+import java.math.BigDecimal;
+
 public class SummaryDTO {
 
     private int totalPatient;
     private int totalAppointment;
-    private int totalPayment;
+    private BigDecimal totalPayment;
     private int totalDoctor;
 
     public int getTotalPatient() {
@@ -23,11 +25,11 @@ public class SummaryDTO {
         this.totalAppointment = totalAppointment;
     }
 
-    public int getTotalPayment() {
+    public BigDecimal getTotalPayment() {
         return totalPayment;
     }
 
-    public void setTotalPayment(int totalPayment) {
+    public void setTotalPayment(BigDecimal totalPayment) {
         this.totalPayment = totalPayment;
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.WriterException;
 import com.pms.easy_book.entity.Appointments;
+import com.pms.easy_book.repo.AppointmentRepo;
 import com.pms.easy_book.utils.QRCodeGenerator;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -26,6 +27,28 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private AppointmentRepo appointmentRepo;
+
+
+    public void sendConfirmationEmail(Long appointmentId)
+            throws Exception {
+
+        Appointments appointment = appointmentRepo.findById(appointmentId)
+                .orElseThrow(() ->
+                        new RuntimeException("Appointment not found"));
+
+        confirmCode(appointment);
+    }
+
+    public void sendTestEmail(String emailToSend){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setSubject("Email sent");
+        message.setTo(emailToSend);
+        message.setText("Hi I am your Friend");
+
+        mailSender.send(message);
+    }
 
     public void sendEmail(Appointments appointment)
     {
@@ -94,8 +117,7 @@ public class EmailService {
 
         helper.setTo(appointment.getPatientEmail());
         helper.setSubject("Your Appointment Confirmation");
-        helper.setText("Dear " + appointment.getPatientName() + ",\n\nHere is your QR code for the appointment."+
-                qrCodeImage);
+        helper.setText("Dear " + appointment.getPatientName() + ",\n\nHere is your QR code for the appointment.");
 
         InputStreamSource attachment = new ByteArrayResource(qrCodeImage);
         helper.addAttachment("appointment_qr.png", attachment);

@@ -1,5 +1,7 @@
 package com.pms.easy_book.service;
 
+import com.pms.easy_book.Enum.BookingStatus;
+import com.pms.easy_book.Enum.PaymentStatus;
 import com.pms.easy_book.dto.SummaryDTO;
 import com.pms.easy_book.exception.ResourceNotFound;
 import com.pms.easy_book.repo.AppointmentRepo;
@@ -8,6 +10,8 @@ import com.pms.easy_book.repo.PatientRepo;
 import com.pms.easy_book.repo.PaymentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 
 @Service
 public class SummaryService {
@@ -22,29 +26,22 @@ public class SummaryService {
     private PatientRepo patientRepo;
 
     public SummaryDTO getLiveSummary(){
-        SummaryDTO ns = new SummaryDTO();
+        SummaryDTO summary = new SummaryDTO();
+        
+        long appointmentCount = appointmentRepo.countByStatus(BookingStatus.SUCCESS);
+        System.out.println("app count "+appointmentCount);
+        long doctorCount = doctorRepository.count();
+        System.out.println("doctor count "+doctorCount);
+        long patientCount = patientRepo.count();
+        System.out.println("patient count "+patientCount);
+        BigDecimal totalPaymentAmountByStatus = paymentRepo.getTotalPaymentAmountByStatus(PaymentStatus.SUCCESSFUL);
+        System.out.println("payment count "+totalPaymentAmountByStatus);
+            summary.setTotalAppointment((int)appointmentCount);
+            summary.setTotalDoctor((int)doctorCount);
+            summary.setTotalPatient((int)patientCount);
+            summary.setTotalPayment(totalPaymentAmountByStatus);
 
-        if((int) patientRepo.count()>0
-                && (int) appointmentRepo.count()>0
-                && (int) doctorRepository.count()>0)
-        {
-            ns.setTotalPatient((int) patientRepo.count());
-            ns.setTotalDoctor((int) doctorRepository.count());
-            ns.setTotalAppointment((int) appointmentRepo.count());
-        }
-        else{
-            ns.setTotalAppointment(0);
-            ns.setTotalDoctor(0);
-            ns.setTotalPatient(0);
-        }
-
-        paymentRepo.getTotalPaymentAmount().orElseThrow(()-> new ResourceNotFound("No payment done yet"));
-        if(paymentRepo.getTotalPaymentAmount().get()>0){
-            ns.setTotalPayment(paymentRepo.getTotalPaymentAmount().get());
-        }else {
-            ns.setTotalPayment(0);
-        }
-        return ns;
+        return summary;
     }
 
 }

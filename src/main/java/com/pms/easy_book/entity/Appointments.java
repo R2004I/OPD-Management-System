@@ -1,7 +1,7 @@
 package com.pms.easy_book.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pms.easy_book.Enum.Status;
+import com.pms.easy_book.Enum.BookingStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -19,7 +19,7 @@ public class Appointments {
     private int amount;
     private LocalDate appointmentDate;
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private BookingStatus status;
     private String confirmationCode;
     private boolean hasVisited;
 
@@ -95,11 +95,11 @@ public class Appointments {
         this.appointmentDate = appointmentDate;
     }
 
-    public Status getStatus() {
+    public BookingStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(BookingStatus status) {
         this.status = status;
     }
 

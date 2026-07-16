@@ -4,6 +4,7 @@ package com.pms.easy_book.controller.authenticated_controller;
 import com.pms.easy_book.dto.AppointmentDto;
 import com.pms.easy_book.entity.Appointments;
 import com.pms.easy_book.service.AppointmentService;
+import com.pms.easy_book.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ public class AppointmentControllerAuth {
 
     @Autowired
     private AppointmentService service;
+
+    @Autowired
+    private EmailService emailService;
 
 
     @PostMapping("/create-new-appointment")
@@ -47,5 +51,17 @@ public class AppointmentControllerAuth {
     {
         Appointments appointmentDetails = service.getAppointmentDetails(code);
         return ResponseEntity.status(HttpStatus.OK).body(appointmentDetails);
+    }
+
+    @PostMapping("/send-confirmation-email/{appointmentId}")
+    public ResponseEntity<?> sendConfirmationEmail(
+            @PathVariable Long appointmentId) {
+
+        try {
+            emailService.sendConfirmationEmail(appointmentId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.ok("Email sent successfully");
     }
 }

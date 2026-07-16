@@ -1,6 +1,6 @@
 package com.pms.easy_book.service;
 
-import com.pms.easy_book.Enum.Status;
+import com.pms.easy_book.Enum.BookingStatus;
 import com.pms.easy_book.dto.AppointmentDto;
 import com.pms.easy_book.dto.AppointmentSummaryDTO;
 import com.pms.easy_book.entity.Appointments;
@@ -110,7 +110,7 @@ public class AppointmentService {
         newAppointment.setDepartment(appointment.getDepartment());
         newAppointment.setUser(user);
         newAppointment.setAmount(50 + doctors.getFees());
-        newAppointment.setStatus(Status.PENDING);
+        newAppointment.setStatus(BookingStatus.PENDING);
         newAppointment.setHasVisited(false);
         newAppointment.setPayment(null);
 
@@ -134,13 +134,13 @@ public class AppointmentService {
     public String cancelAppointment(Long appointmentId){
         Appointments existingAppointment = appointmentRepo.findById(appointmentId)
                 .orElseThrow(() -> new ResourceNotFound("appointment not found"));
-        if(existingAppointment.getStatus() == Status.CANCELLED){
+        if(existingAppointment.getStatus() == BookingStatus.CANCEL){
             throw new RuntimeException("Appointment already cancelled");
         }
         if(existingAppointment.getAppointmentDate().isBefore(LocalDate.now())){
             throw  new RuntimeException("Appointment can't be cancelled");
         }
-        existingAppointment.setStatus(Status.CANCELLED);
+        existingAppointment.setStatus(BookingStatus.CANCEL);
 
         Doctors doctor = existingAppointment.getDoctor();
         List<Appointments> appointmentOFDoctor = doctor.getAppointment();
@@ -166,7 +166,7 @@ public class AppointmentService {
         }
         else {
             appointments.setHasVisited(true);
-            appointments.setStatus(Status.COMPLETED);
+            appointments.setStatus(BookingStatus.VISITED);
             appointmentRepo.save(appointments);
         }
         return appointments;
@@ -175,13 +175,13 @@ public class AppointmentService {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void updateStatus(){
-        List<Appointments> byStatus = appointmentRepo.findByStatus(Status.PENDING);
+        List<Appointments> byStatus = appointmentRepo.findByStatus(BookingStatus.PENDING);
 
         LocalDate today = LocalDate.now();
         for(Appointments appointment:byStatus){
             if(appointment.getAppointmentDate().isBefore(today)){
                 appointment.setHasVisited(false);
-                appointment.setStatus(Status.PENDING);
+                appointment.setStatus(BookingStatus.EXPIRE);
             }
         }
 
