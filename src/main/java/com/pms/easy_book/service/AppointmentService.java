@@ -1,8 +1,11 @@
 package com.pms.easy_book.service;
 
 import com.pms.easy_book.Enum.BookingStatus;
+import com.pms.easy_book.Enum.PaymentStatus;
 import com.pms.easy_book.dto.AppointmentDto;
 import com.pms.easy_book.dto.AppointmentSummaryDTO;
+import com.pms.easy_book.dto.QRVerificationRequest;
+import com.pms.easy_book.dto.QRVerificationResponse;
 import com.pms.easy_book.entity.Appointments;
 import com.pms.easy_book.entity.Doctors;
 import com.pms.easy_book.entity.Patient;
@@ -17,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -41,6 +47,9 @@ public class AppointmentService {
 
     @Autowired
     private PaginationUtil pageUtil;
+
+    private final String SECRET_KEY = "7d88636efa96b79f23b7713299513595bd27fded370efea8531a443920fbfc90";
+
 
 
     public List<Appointments> getAll(){
@@ -170,6 +179,67 @@ public class AppointmentService {
             appointmentRepo.save(appointments);
         }
         return appointments;
+    }
+
+    @Transactional
+    public QRVerificationResponse verifyQRCode(QRVerificationRequest request)
+            throws NoSuchAlgorithmException {
+
+        Appointments appointment = appointmentRepo.findById(request.getAppointmentId())
+                .orElseThrow(() -> new ResourceNotFound(
+                        "Appointment not found"));
+
+        if (!appointment.getConfirmationCode().equals(request.getConfirmationCode())) {
+            throw new IllegalArgumentException("Invalid confirmation code");
+        }
+
+        String expectedHash = generateSecureHash(
+                appointment.getId()
+                        + appointment.getConfirmationCode()
+                        + SECRET_KEY);
+
+        if (!MessageDigest.isEqual(
+                expectedHash.getBytes(StandardCharsets.UTF_8),
+                request.getSecureHash().getBytes(StandardCharsets.UTF_8))) {
+
+            throw new IllegalArgumentException("Invalid QR Code");
+        }
+
+        if (appointment.isHasVisited()) {
+            throw new IllegalStateException("Patient already checked in.");
+        }
+
+        if (!appointment.getAppointmentDate().equals(LocalDate.now())) {
+            throw new IllegalStateException("Appointment is not for today.");
+        }
+
+        if (appointment.getPayment().getStatus() != PaymentStatus.SUCCESSFUL) {
+            throw new IllegalStateException("Payment not completed.");
+        }
+
+        appointment.setHasVisited(true);
+        appointment.setStatus(BookingStatus.VISITED);
+
+        appointmentRepo.save(appointment);
+
+        return new QRVerificationResponse(
+                appointment.getPatientName(),
+                appointment.getPatientEmail(),
+                appointment.getPatientPhoneNo(),
+                appointment.getStatus(),
+                appointment.getDepartment(),
+                appointment.getDoctor().getName()
+        );
+    }
+
+    private String generateSecureHash(String data) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] hashBytes = digest.digest(data.getBytes());
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hashBytes) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
     }
 
 

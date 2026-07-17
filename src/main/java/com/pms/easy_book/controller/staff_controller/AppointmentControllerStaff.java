@@ -1,6 +1,8 @@
 package com.pms.easy_book.controller.staff_controller;
 
 import com.pms.easy_book.dto.AppointmentSummaryDTO;
+import com.pms.easy_book.dto.QRVerificationRequest;
+import com.pms.easy_book.dto.QRVerificationResponse;
 import com.pms.easy_book.entity.Appointments;
 import com.pms.easy_book.service.AppointmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 
 @RestController
@@ -44,5 +47,15 @@ public class AppointmentControllerStaff {
         Pageable pageable = Pageable.ofSize(size).withPage(page);
         Page<AppointmentSummaryDTO> appointmentsOfTodayByPage = service.getAppointmentsOfTodayByPage(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(appointmentsOfTodayByPage);
+    }
+
+    @PostMapping("/verify/appointment")
+    public ResponseEntity<?> verifyQrCode(@RequestBody QRVerificationRequest request){
+        try {
+            QRVerificationResponse qrVerificationResponse = service.verifyQRCode(request);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(qrVerificationResponse);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

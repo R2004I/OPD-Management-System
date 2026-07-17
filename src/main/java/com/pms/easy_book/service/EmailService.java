@@ -30,6 +30,8 @@ public class EmailService {
     @Autowired
     private AppointmentRepo appointmentRepo;
 
+    private final String SECRET_KEY = "7d88636efa96b79f23b7713299513595bd27fded370efea8531a443920fbfc90";
+
 
     public void sendConfirmationEmail(Long appointmentId)
             throws Exception {
@@ -105,7 +107,7 @@ public class EmailService {
         qrData.put("confirmationCode", appointment.getConfirmationCode());
 
         // Generate secure hash
-        String secureHash = generateSecureHash(appointment.getId() + appointment.getConfirmationCode() + "SECRET_KEY");
+        String secureHash = generateSecureHash(appointment.getId() + appointment.getConfirmationCode() + SECRET_KEY);
         qrData.put("secureHash", secureHash);
 
         // Convert data to JSON
@@ -116,7 +118,7 @@ public class EmailService {
         byte[] qrCodeImage = QRCodeGenerator.generateQRCode(jsonData, 300, 300);
 
         helper.setTo(appointment.getPatientEmail());
-        helper.setSubject("Your Appointment Confirmation");
+        helper.setSubject("Your Appointment Confirmation: code "+appointment.getConfirmationCode() );
         helper.setText("Dear " + appointment.getPatientName() + ",\n\nHere is your QR code for the appointment.");
 
         InputStreamSource attachment = new ByteArrayResource(qrCodeImage);
